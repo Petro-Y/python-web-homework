@@ -1,13 +1,16 @@
 from flask import Flask, request, redirect
 app = Flask(__name__)
 
-@app.route('/', methods=['POST', 'GET'])
+@app.route('/', methods=['POST'])
+def mytwitter_post():
+    message=request.form['message']
+    with open('mytwitter.txt', mode='a') as f:
+        f.write(message+'\n')
+        return redirect('/')
+
+
+@app.route('/', methods=['GET'])
 def mytwitter():
-    if request.method=='POST':
-        message=request.form['message']
-        with open('mytwitter.txt', mode='a') as f:
-            f.write(message+'\n')
-            return redirect('/')
     res=''
     try:
         with open('mytwitter.txt') as f:
