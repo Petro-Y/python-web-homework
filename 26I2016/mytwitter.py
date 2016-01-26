@@ -11,7 +11,7 @@ def mytwitter():
     res=''
     try:
         with open('mytwitter.txt') as f:
-            res+='<br/>'.join(f)
+            res+='<br/>'.join(tuple(f)[-1:-10:-1])
     except Exception:
         pass
     res+='''
