@@ -67,9 +67,56 @@ def add_book(title, authors):
     cur.close()
     conn.close()
 
+##################
+from flask import Flask, request, redirect
+app = Flask(__name__)
+
+@app.route('/', methods=['GET'])
+def web_list_books():
+    try:
+        author=request.args.get('author')
+    except Exception:
+        author=None
+    print('autor:', author)
+    res=''
+    conn=sqlite3.connect('library')
+    cur=conn.cursor()
+    cur.execute('''
+    select title, group_concat(name) from Book join BookAuthor on Book.id=BookAuthor.book_id
+    join Author on Author.id=BookAuthor.author_id'''
+    +(" where name='"+author+"' " if author else ' ')+
+    '''
+    group by book_id
+    ''')
+    for row in cur:
+        res+='<li>%s - <b>%s</b></li>'%(row[1], row[0])
+        #print(row)
+    cur.close()
+    conn.close()
+    res='''
+    <ul>
+    %s
+    </ul>
+
+    <form action=add method=POST>
+        <input name=book><br>
+        <textarea name=authors></textarea><br>
+        <input type=submit>
+    </form>
+    '''%res
+    return res
+
+@app.route('/add', methods=['POST'])
+def web_add_book():
+    book=request.form['book']
+    authors=map(str.strip, request.form['authors'].split('\n'))
+    add_book(book, authors)
+    return redirect('/')
+
 
 if __name__=='__main__':
-    init_db()
-    add_book('The Book of the Books', ['God', 'Jesus Christ', 'Flying Spaghetti Monster'])
-    list_books()
+    #init_db()
+    #add_book('The Book of the Books', ['God', 'Jesus Christ', 'Flying Spaghetti Monster'])
+    #list_books()
+    app.run()
 
