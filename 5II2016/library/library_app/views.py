@@ -1,9 +1,10 @@
 from django.shortcuts import render
+from django.http import HttpResponse
 
 # Create your views here.
 from .models import *
 
-def root():
+def root(request):
     res=''
     for book in Book.objects.all():
         item=[book.title]
@@ -12,4 +13,4 @@ def root():
                 item+=[author.name]
         res+='<li>%s - %s</li>'%(', '.join(item[1:]), item[0])
     res='<ul>%s</ul>'%res
-    #show result....
+    return HttpResponse(res)
