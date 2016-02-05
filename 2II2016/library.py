@@ -71,6 +71,10 @@ def add_book(title, authors):
 from flask import Flask, request, redirect
 app = Flask(__name__)
 
+import urllib
+def split_authors(s):
+    return ', '.join(map(lambda a: '<a href="/?author=%s">%s</a>' %(urllib.quote(a),a),s.split('|')))
+
 @app.route('/', methods=['GET'])
 def web_list_books():
     try:
@@ -82,14 +86,14 @@ def web_list_books():
     conn=sqlite3.connect('library')
     cur=conn.cursor()
     cur.execute('''
-    select title, group_concat(name) from Book join BookAuthor on Book.id=BookAuthor.book_id
+    select title, group_concat(name, '|') from Book join BookAuthor on Book.id=BookAuthor.book_id
     join Author on Author.id=BookAuthor.author_id'''
     +(" where name='"+author+"' " if author else ' ')+
     '''
     group by book_id
     ''')
     for row in cur:
-        res+='<li>%s - <b>%s</b></li>'%(row[1], row[0])
+        res+='<li>%s - <b>%s</b></li>'%(split_authors(row[1]), row[0])
         #print(row)
     cur.close()
     conn.close()
