@@ -12,5 +12,5 @@ def root(request):
             for author in Author.objects.filter(id=ba.author_id):
                 item+=[author.name]
         res+='<li>%s - %s</li>'%(', '.join(item[1:]), item[0])
-    res='<ul>%s</ul>'%res
+    res='Перелік книг:<ul>%s</ul>'%res
     return HttpResponse(res)
