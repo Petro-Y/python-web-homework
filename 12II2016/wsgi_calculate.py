@@ -21,12 +21,18 @@ def app(environ, start_response):
     # verify expr using regex:
     err=''
     if not re.fullmatch(r'\(*-?([0-9]+\.)?[0-9]+([-+*/]\(*-?([0-9]+\.)?[0-9]+\)*)*\)*',expr) or not check_parentheses(expr):
-        err='Помилка: <span style="color:red">'+expr+'</span>'
+        err='<span style="color:red">Помилка: </span>'+expr
         expr=''
+    else:
+        try:
+            expr=expr+' = '+str(eval(expr))
+        except ZeroDivisionError:
+            err='<span style="color:red"> - Ділення на 0</span>'
+
     start_response('200 OK', [('Content-Type', 'text/html; charset=UTF-8')])
     return [
         b"""<form> <input name=expr> <input type=submit></form>""",
-        (expr+' = '+str(eval(expr)) if expr else '').encode(),
+        expr.encode(),
         err.encode()
     ]
 
