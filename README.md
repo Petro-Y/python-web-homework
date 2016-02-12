@@ -13,7 +13,6 @@ by Petro Yermolenko
   * https://docs.djangoproject.com/en/1.9/topics/db/models/
   * http://tutorial.djangogirls.org/uk/django_orm/index.html
   * Д/З: Flask, SQL-alchemy (повторити все це з ними)
-
 <!--
   C:\Users\oper4\PycharmProjects\python-web-homework\5II2016\library>py -3 manage.
 py makemigrations
@@ -38,3 +37,4 @@ Running migrations:
   Rendering model states... DONE
   Applying library_app.0001_initial... OK
 -->
+* 12II2016 - WSGI
