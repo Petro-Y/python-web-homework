@@ -29,6 +29,8 @@ def app(environ, start_response):
                 expr=expr+' = '+str(eval(expr))
             except ZeroDivisionError:
                 err='<span style="color:red"> - Ділення на 0</span>'
+            except OverflowError:
+                err='<span style="color:red"> - Результат надто великий</span>'
 
     start_response('200 OK', [('Content-Type', 'text/html; charset=UTF-8')])
     return [
