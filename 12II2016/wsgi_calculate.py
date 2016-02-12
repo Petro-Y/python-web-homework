@@ -6,7 +6,9 @@ import re
 def app(environ, start_response):
     parameters = parse_qs(environ.get('QUERY_STRING', ''))
     expr=parameters['expr'][0] if 'expr' in parameters else ''
-    # TODO: verify expr using regex...
+    # verify expr using regex:
+    if not re.fullmatch(r'[0-9]+([-+*/][0-9]+)+',expr):
+        expr=''
     start_response('200 OK', [('Content-Type', 'text/html')])
     return [
         b"""<form> <input name=expr> <input type=submit></form>""",
