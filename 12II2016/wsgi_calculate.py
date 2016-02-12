@@ -20,7 +20,7 @@ def app(environ, start_response):
     expr=parameters['expr'][0] if 'expr' in parameters else ''
     # verify expr using regex:
     err=''
-    if not re.fullmatch(r'\(*-?[0-9]+([-+*/]\(*-?[0-9]+\)*)*\)*',expr) or not check_parentheses(expr):
+    if not re.fullmatch(r'\(*-?([0-9]+\.)?[0-9]+([-+*/]\(*-?([0-9]+\.)?[0-9]+\)*)*\)*',expr) or not check_parentheses(expr):
         err='Помилка: <span style="color:red">'+expr+'</span>'
         expr=''
     start_response('200 OK', [('Content-Type', 'text/html; charset=UTF-8')])
