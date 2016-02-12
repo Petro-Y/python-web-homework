@@ -3,7 +3,9 @@ from urllib.parse import parse_qs
 #from html import escape
 import re
 
-def check_parentheses(expr):
+def check_expr(expr):
+    if not re.match(r'^\(*-?([0-9]+\.)?[0-9]+(([-+*/%]|//|\*\*)\(*-?([0-9]+\.)?[0-9]+\)*)*\)*$',expr):
+        return False
     expr=re.sub(r'[^()]', '', expr)
     lvl=0
     for c in expr:
@@ -21,9 +23,8 @@ def app(environ, start_response):
     # verify expr using regex:
     err=''
     if expr:
-        if not re.match(r'^\(*-?([0-9]+\.)?[0-9]+(([-+*/%]|//|\*\*)\(*-?([0-9]+\.)?[0-9]+\)*)*\)*$',expr) or not check_parentheses(expr):
-            err='<span style="color:red">Помилка: </span>'+expr
-            expr=''
+        if not check_expr(expr):
+            err='<span style="color:red"> - Синтаксична помилка</span>'
         else:
             try:
                 expr=expr+' = '+str(eval(expr))
