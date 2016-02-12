@@ -20,14 +20,15 @@ def app(environ, start_response):
     expr=parameters['expr'][0] if 'expr' in parameters else ''
     # verify expr using regex:
     err=''
-    if not re.fullmatch(r'\(*-?([0-9]+\.)?[0-9]+([-+*/]\(*-?([0-9]+\.)?[0-9]+\)*)*\)*',expr) or not check_parentheses(expr):
-        err='<span style="color:red">Помилка: </span>'+expr
-        expr=''
-    else:
-        try:
-            expr=expr+' = '+str(eval(expr))
-        except ZeroDivisionError:
-            err='<span style="color:red"> - Ділення на 0</span>'
+    if expr:
+        if not re.fullmatch(r'\(*-?([0-9]+\.)?[0-9]+([-+*/]\(*-?([0-9]+\.)?[0-9]+\)*)*\)*',expr) or not check_parentheses(expr):
+            err='<span style="color:red">Помилка: </span>'+expr
+            expr=''
+        else:
+            try:
+                expr=expr+' = '+str(eval(expr))
+            except ZeroDivisionError:
+                err='<span style="color:red"> - Ділення на 0</span>'
 
     start_response('200 OK', [('Content-Type', 'text/html; charset=UTF-8')])
     return [
