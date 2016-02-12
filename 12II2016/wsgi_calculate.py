@@ -21,7 +21,7 @@ def app(environ, start_response):
     # verify expr using regex:
     err=''
     if expr:
-        if not re.fullmatch(r'\(*-?([0-9]+\.)?[0-9]+([-+*/]\(*-?([0-9]+\.)?[0-9]+\)*)*\)*',expr) or not check_parentheses(expr):
+        if not re.fullmatch(r'\(*-?([0-9]+\.)?[0-9]+(([-+*/%]|//|\*\*)\(*-?([0-9]+\.)?[0-9]+\)*)*\)*',expr) or not check_parentheses(expr):
             err='<span style="color:red">Помилка: </span>'+expr
             expr=''
         else:
