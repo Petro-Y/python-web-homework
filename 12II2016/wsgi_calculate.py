@@ -19,12 +19,15 @@ def app(environ, start_response):
     parameters = parse_qs(environ.get('QUERY_STRING', ''))
     expr=parameters['expr'][0] if 'expr' in parameters else ''
     # verify expr using regex:
+    err=''
     if not re.fullmatch(r'\(*-?[0-9]+([-+*/]\(*-?[0-9]+\)*)*\)*',expr) or not check_parentheses(expr):
+        err='Помилка: <span style="color:red">'+expr+'</span>'
         expr=''
-    start_response('200 OK', [('Content-Type', 'text/html')])
+    start_response('200 OK', [('Content-Type', 'text/html; charset=UTF-8')])
     return [
         b"""<form> <input name=expr> <input type=submit></form>""",
-        (expr+' = '+str(eval(expr)) if expr else '').encode()
+        (expr+' = '+str(eval(expr)) if expr else '').encode(),
+        err.encode()
     ]
 
 if __name__=='__main__':
