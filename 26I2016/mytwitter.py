@@ -6,7 +6,7 @@ def mytwitter_post():
     message=request.form['message']
     with open('mytwitter.txt', mode='a') as f:
         f.write(message+'\n')
-        return redirect('/')
+        return redirect('.')
 
 
 @app.route('/', methods=['GET'])
