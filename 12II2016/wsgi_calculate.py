@@ -17,7 +17,7 @@ def check_expr(expr):
             return False
     return lvl==0
 
-def app(environ, start_response):
+def application(environ, start_response):
     parameters = parse_qs(environ.get('QUERY_STRING', ''))
     expr=parameters['expr'][0] if 'expr' in parameters else ''
     # verify expr using regex:
@@ -42,7 +42,7 @@ def app(environ, start_response):
 
 if __name__=='__main__':
     from wsgiref.simple_server import make_server
-    httpd = make_server('', 8000, app)
+    httpd = make_server('', 8000, application)
     print ("Serving HTTP on port 8000...")
 
     # Respond to requests until process is killed
